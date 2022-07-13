@@ -10,7 +10,6 @@ import (
 var GitlabTagEventMap = map[string]func(p gitlab.TagEventPayload) error{
 	"3472737": tag.Inkscape, // https://gitlab.com/inkscape/inkscape
 	"6094330": tag.Commento, // https://gitlab.com/commento/commento
-
 }
 
 // EventProjectHandlerMap is a map of event type to project ID to event handler function

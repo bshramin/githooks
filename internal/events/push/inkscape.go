@@ -7,5 +7,6 @@ import (
 
 func Inkscape(p gitlab.PushEventPayload) error {
 	logrus.Info("Inkscape push event")
+
 	return nil
 }

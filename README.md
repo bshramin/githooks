@@ -1,2 +1,2 @@
 # githooks
-The Ultimate Gitlab Hook Handler
+The Ultimate Github and Gitlab Hook Handler

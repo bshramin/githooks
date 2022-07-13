@@ -8,8 +8,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+const appName = "githooks"
+
 func main() {
-	configInit("githooks")
+	configInit(appName)
 
 	http.HandleFunc("/webhooks/gitlab", handlers.GitlabHandler)
 	http.HandleFunc("/webhooks/github", handlers.GithubHandler)
