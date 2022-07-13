@@ -1,47 +1,21 @@
 package main
 
 import (
-	"fmt"
-
 	"net/http"
 
-	"github.com/go-playground/webhooks/v6/gitlab"
+	"github.com/bshramin/githooks/internal/handlers"
 	"github.com/sirupsen/logrus"
-)
-
-const (
-	path = "/webhooks"
+	"github.com/spf13/viper"
 )
 
 func main() {
-	hook, _ := gitlab.New(gitlab.Options.Secret("thesecret"))
+	configInit("githooks")
 
-	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/webhooks/gitlab", handlers.GitlabHandler)
+	http.HandleFunc("/webhooks/github", handlers.GithubHandler)
 
-		fmt.Println("Something received")
-		logrus.Error("Something received")
-		payload, err := hook.Parse(r, gitlab.TagEvents, gitlab.PushEvents)
-		if err != nil {
-			if err == gitlab.ErrEventNotFound {
-				// ok event wasn't one of the ones asked to be parsed
-			} else {
-				logrus.Error("Could not parse event: ", err)
-			}
-		}
-
-		switch payload.(type) {
-
-		case gitlab.TagEventPayload:
-			tagPayload := payload.(gitlab.TagEventPayload)
-			// Do whatever you want from here...
-			fmt.Printf("%+v", tagPayload)
-
-		case gitlab.PushEventPayload:
-			pushPayload := payload.(gitlab.PushEventPayload)
-			// Do whatever you want from here...
-			fmt.Printf("%+v", pushPayload)
-		}
-
-	})
-	http.ListenAndServe(":3000", nil)
+	port := viper.GetString("port")
+	logrus.Info("Listening on port " + port)
+	err := http.ListenAndServe(":"+port, nil)
+	logrus.Error(err)
 }
